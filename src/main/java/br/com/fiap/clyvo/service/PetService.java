@@ -7,6 +7,8 @@ import br.com.fiap.clyvo.model.Tutor;
 import br.com.fiap.clyvo.repository.PetRepository;
 import br.com.fiap.clyvo.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +33,6 @@ public class PetService {
         pet.setIdade(dto.idade());
         pet.setPeso(dto.peso());
         pet.setTutor(tutor);
-        // Nota: O healthScore não precisa ser "setado" aqui porque já definimos que o padrão é 100 na Entidade!
 
         // 3. Salva no banco de dados Oracle
         pet = petRepository.save(pet);
@@ -47,5 +48,20 @@ public class PetService {
                 pet.getHealthScore(),
                 tutor.getId()
         );
+    }
+
+    public Page<PetResponseDTO> listar(Pageable paginacao) {
+        // Busca todos os pets com paginação e converte para DTO
+        return petRepository.findAll(paginacao)
+                .map(pet -> new PetResponseDTO(
+                        pet.getId(),
+                        pet.getNome(),
+                        pet.getEspecie(),
+                        pet.getRaca(),
+                        pet.getIdade(),
+                        pet.getPeso(),
+                        pet.getHealthScore(),
+                        pet.getTutor().getId() // Pega o ID do dono do pet!
+                ));
     }
 }

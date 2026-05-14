@@ -5,6 +5,9 @@ import br.com.fiap.clyvo.dto.PetResponseDTO;
 import br.com.fiap.clyvo.service.PetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +21,15 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<PetResponseDTO> cadastrar(@Valid @RequestBody PetRequestDTO dto) {
-        // Envia o DTO validado para o Service fazer a mágica
         PetResponseDTO response = service.cadastrar(dto);
-
-        // Retorna o status 201 CREATED e os dados salvos
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<PetResponseDTO>> listar(
+            @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+
+        Page<PetResponseDTO> page = service.listar(paginacao);
+        return ResponseEntity.ok(page);
     }
 }
