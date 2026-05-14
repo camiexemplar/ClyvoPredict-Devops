@@ -5,6 +5,9 @@ import br.com.fiap.clyvo.dto.TutorResponseDTO;
 import br.com.fiap.clyvo.service.TutorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +21,15 @@ public class TutorController {
 
     @PostMapping
     public ResponseEntity<TutorResponseDTO> cadastrar(@Valid @RequestBody TutorRequestDTO dto) {
-        // O @Valid garante que aquelas regras (NotBlank, Email) que colocamos no DTO sejam checadas!
         TutorResponseDTO response = service.cadastrar(dto);
-
-        // Retorna o status 201 CREATED (Padrão RESTful exigido no challenge)
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<TutorResponseDTO>> listar(
+            @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+
+        Page<TutorResponseDTO> page = service.listar(paginacao);
+        return ResponseEntity.ok(page);
     }
 }
