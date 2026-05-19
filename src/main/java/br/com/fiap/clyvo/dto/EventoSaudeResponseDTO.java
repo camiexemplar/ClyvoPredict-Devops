@@ -5,9 +5,9 @@ import java.time.LocalDate;
 
 public record EventoSaudeResponseDTO(
         Long id,
+        Long petId,
+        TipoEvento tipoEvento,
         String descricao,
-        TipoEvento tipo,
         LocalDate dataEvento,
-        Long petId
-) {
-}
+        int novoHealthScore
+) {}

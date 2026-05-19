@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface EventoSaudeRepository extends JpaRepository<EventoSaude, Long> {
 
-    // Esse método mágico do Spring Data vai nos permitir buscar todo o histórico de um pet específico!
     List<EventoSaude> findByPetIdOrderByDataEventoDesc(Long petId);
 
 }

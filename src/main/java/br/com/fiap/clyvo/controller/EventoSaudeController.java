@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/eventos")
+@CrossOrigin(origins = "*") // Libera o acesso para o aplicativo mobile
 public class EventoSaudeController {
 
     @Autowired
     private EventoSaudeService service;
 
     @PostMapping
-    public ResponseEntity<EventoSaudeResponseDTO> registrar(@Valid @RequestBody EventoSaudeRequestDTO dto) {
-        // Envia os dados para o Service fazer a mágica do Health Score
-        EventoSaudeResponseDTO response = service.registrar(dto);
-
-        // Retorna 201 CREATED e os dados salvos
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<EventoSaudeResponseDTO> cadastrarEvento(@Valid @RequestBody EventoSaudeRequestDTO dto) {
+        // Agora a variável recebe o DTO corretamente retornado pelo Service
+        EventoSaudeResponseDTO eventoSalvo = service.cadastrarEvento(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventoSalvo);
     }
 }
