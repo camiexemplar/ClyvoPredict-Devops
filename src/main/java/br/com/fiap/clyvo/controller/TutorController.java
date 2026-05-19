@@ -2,6 +2,8 @@ package br.com.fiap.clyvo.controller;
 
 import br.com.fiap.clyvo.dto.TutorRequestDTO;
 import br.com.fiap.clyvo.dto.TutorResponseDTO;
+import br.com.fiap.clyvo.dto.TutorLoginRequestDTO;
+import br.com.fiap.clyvo.dto.TutorAuthResponseDTO;
 import br.com.fiap.clyvo.service.TutorService;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tutores")
+@CrossOrigin(origins = "*") // Permite que o aplicativo mobile se conecte aqui
 public class TutorController {
 
     @Autowired
@@ -26,10 +29,15 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<TutorAuthResponseDTO> login(@Valid @RequestBody TutorLoginRequestDTO dto) {
+        TutorAuthResponseDTO response = service.autenticar(dto);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<Page<TutorResponseDTO>> listar(
             @ParameterObject @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-
         Page<TutorResponseDTO> page = service.listar(paginacao);
         return ResponseEntity.ok(page);
     }
