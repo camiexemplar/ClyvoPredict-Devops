@@ -4,6 +4,7 @@ import br.com.fiap.clyvo.dto.PetRequestDTO;
 import br.com.fiap.clyvo.dto.PetResponseDTO;
 import br.com.fiap.clyvo.service.PetService;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +28,27 @@ public class PetController {
 
     @GetMapping
     public ResponseEntity<Page<PetResponseDTO>> listar(
-            @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+            @ParameterObject @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
 
         Page<PetResponseDTO> page = service.listar(paginacao);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PetResponseDTO> buscarPorId(@PathVariable Long id) {
+        PetResponseDTO response = service.buscarPorId(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PetResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody PetRequestDTO dto) {
+        PetResponseDTO response = service.atualizar(id, dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }
