@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: clyvo-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - h2data:/data
+
+volumes:
+  h2data:
