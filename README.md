@@ -1,287 +1,293 @@
-<div align="center">
+# Clyvo Predict
 
-# 🔮 Clyvo Predict
+## Descrição do Projeto
 
-**Microsserviço de Predição Inteligente — Challenge FIAP 2026**
+O Clyvo Predict é uma API REST desenvolvida em Java com Spring Boot para gerenciamento de tutores, pets e eventos de saúde animal.
 
-[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/17/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-brightgreen?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Oracle](https://img.shields.io/badge/Oracle-DB-red?style=for-the-badge&logo=oracle&logoColor=white)](https://www.oracle.com/database/)
-[![Maven](https://img.shields.io/badge/Maven-Build-blue?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
-[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
-
-> Serviço backend desenvolvido como parte do **Challenge FIAP 2026** em parceria com a startup **Clyvo** — plataforma voltada à análise preditiva e inteligência de dados para decisões estratégicas de negócio.
-
-</div>
+A solução permite o cadastro e monitoramento de informações importantes relacionadas aos animais, facilitando o controle de dados veterinários e acompanhamento de saúde.
 
 ---
 
-## 📋 Índice
+# Benefícios para o Negócio
 
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Pré-requisitos](#-pré-requisitos)
-- [Configuração e Instalação](#-configuração-e-instalação)
-- [Executando a Aplicação](#-executando-a-aplicação)
-- [Documentação da API](#-documentação-da-api)
-- [Variáveis de Ambiente](#-variáveis-de-ambiente)
-- [Testes](#-testes)
-- [Time](#-time)
-- [Licença](#-licença)
+- Centralização das informações dos pets e tutores
+- Facilidade no gerenciamento de dados veterinários
+- Monitoramento de eventos de saúde animal
+- Melhor organização e rastreabilidade das informações
+- API preparada para integração com aplicações web e mobile
+- Solução conteinerizada e escalável em nuvem
 
 ---
 
-## 🎯 Sobre o Projeto
+# Tecnologias Utilizadas
 
-O **Clyvo Predict** é o núcleo de backend da solução desenvolvida no **Challenge 2026 da FIAP** em parceria com a startup **Clyvo**. O serviço é responsável por expor uma API RESTful que alimenta modelos preditivos, processa e persiste dados analíticos, e serve como base para a tomada de decisão inteligente dentro da plataforma Clyvo.
-
-### Contexto do Desafio
-
-O Challenge FIAP é um projeto interdisciplinar onde equipes de estudantes trabalham diretamente com empresas reais para desenvolver soluções tecnológicas com impacto no mercado. A **Clyvo** propôs o desafio de criar um serviço de predição capaz de processar dados e entregar insights relevantes de forma escalável e documentada.
-
-### Funcionalidades Principais
-
-- 📊 **Ingestão e persistência** de dados preditivos via API REST
-- ✅ **Validação robusta** de entrada com Bean Validation
-- 🗄️ **Integração com Oracle Database** via JPA/Hibernate
-- 📖 **Documentação interativa** da API com Swagger UI
-- 🔁 **Hot reload** em desenvolvimento com Spring DevTools
+- Java 17
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- H2 Database
+- Docker
+- Docker Compose
+- Azure CLI
+- Swagger / OpenAPI
 
 ---
 
-## 🛠️ Arquitetura e Tecnologias
+# Arquitetura da Solução
 
-### Stack Principal
+Fluxo da arquitetura:
 
-| Tecnologia | Versão | Finalidade |
-|---|---|---|
-| **Java** | 17 (LTS) | Linguagem principal |
-| **Spring Boot** | 3.5 | Framework de aplicação |
-| **Spring Data JPA** | — | Abstração de persistência ORM |
-| **Spring Web** | — | Camada REST (controllers, DTOs) |
-| **Spring Validation** | — | Validação declarativa de entidades |
-| **Oracle JDBC (ojdbc11)** | — | Driver de conexão com o banco Oracle |
-| **Lombok** | — | Redução de boilerplate (getters, setters, builders) |
-| **Springdoc OpenAPI** | 2.8 | Geração automática do Swagger UI |
-| **Spring DevTools** | — | Reload automático em desenvolvimento |
-| **Spring Boot Test** | — | Suporte a testes unitários e de integração |
-| **Maven** | Wrapper | Gerenciamento de build e dependências |
+Usuário
+↓
+Browser / Postman
+↓
+Azure Virtual Machine (Linux)
+↓
+Docker Engine
+↓
+Container Spring Boot
+↓
+Banco H2 Persistente
+↓
+Volume Docker Nomeado
 
-### Padrão Arquitetural
+---
 
-A aplicação segue o padrão de **arquitetura em camadas (Layered Architecture)** típico de aplicações Spring Boot:
+# Endpoints da API
 
+## Tutores
+
+### Listar tutores
+
+```http
+GET /api/tutores
 ```
-┌──────────────────────────────────────┐
-│           Controller Layer           │  ← REST Endpoints (@RestController)
-├──────────────────────────────────────┤
-│            Service Layer             │  ← Regras de negócio (@Service)
-├──────────────────────────────────────┤
-│          Repository Layer            │  ← Acesso a dados (Spring Data JPA)
-├──────────────────────────────────────┤
-│           Database (Oracle)          │  ← Persistência
-└──────────────────────────────────────┘
+
+### Buscar tutor por ID
+
+```http
+GET /api/tutores/{id}
+```
+
+### Criar tutor
+
+```http
+POST /api/tutores
+```
+
+### Login tutor
+
+```http
+POST /api/tutores/login
 ```
 
 ---
 
-## 📁 Estrutura do Projeto
+## Pets
 
+### Listar pets
+
+```http
+GET /api/pets
 ```
-clyvo-predict/
-│
-├── .mvn/wrapper/               # Maven Wrapper (mvnw / mvnw.cmd)
-│
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── br/com/fiap/clyvo/
-│   │   │       ├── controller/     # Controllers REST
-│   │   │       ├── service/        # Lógica de negócio
-│   │   │       ├── repository/     # Interfaces JPA
-│   │   │       ├── model/          # Entidades JPA
-│   │   │       ├── dto/            # Data Transfer Objects
-│   │   │       └── ClyvoApplication.java
-│   │   │
-│   │   └── resources/
-│   │       ├── application.properties   # Configurações gerais
-│   │       └── application-dev.properties
-│   │
-│   └── test/
-│       └── java/
-│           └── br/com/fiap/clyvo/      # Testes unitários e de integração
-│
-├── .gitattributes
-├── .gitignore
-├── mvnw                        # Maven Wrapper (Unix)
-├── mvnw.cmd                    # Maven Wrapper (Windows)
-└── pom.xml                     # Configuração do projeto Maven
+
+### Buscar pet por ID
+
+```http
+GET /api/pets/{id}
+```
+
+### Criar pet
+
+```http
+POST /api/pets
+```
+
+### Atualizar pet
+
+```http
+PUT /api/pets/{id}
+```
+
+### Remover pet
+
+```http
+DELETE /api/pets/{id}
 ```
 
 ---
 
-## ✅ Pré-requisitos
+## Eventos de Saúde
 
-Antes de iniciar, certifique-se de ter instalado em sua máquina:
+### Criar evento
 
-- **[Java 17+](https://adoptium.net/)** — JDK (não apenas JRE)
-- **[Maven 3.8+](https://maven.apache.org/download.cgi)** — ou use o wrapper `./mvnw` incluído no projeto
-- **[Oracle Database](https://www.oracle.com/database/)** — instância local, Docker, ou acesso remoto
-- **[Git](https://git-scm.com/)** — para clonar o repositório
-
-> 💡 **Dica:** Não tem Maven instalado? Sem problema. O projeto inclui o Maven Wrapper (`./mvnw`). Todos os comandos abaixo funcionam substituindo `mvn` por `./mvnw` (Linux/Mac) ou `mvnw.cmd` (Windows).
+```http
+POST /api/eventos
+```
 
 ---
 
-## ⚙️ Configuração e Instalação
+# Como Executar a Aplicação
 
-### 1. Clone o repositório
+## Clonar repositório
 
 ```bash
-git clone https://github.com/gabrielalandim/clyvo-predict.git
-cd clyvo-predict
+git clone https://github.com/camiexemplar/ClyvoPredict-Devops.git
 ```
 
-### 2. Configure o banco de dados
+---
 
-Edite o arquivo `src/main/resources/application.properties` com as credenciais da sua instância Oracle:
-
-```properties
-# Datasource
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521:XE
-spring.datasource.username=SEU_USUARIO
-spring.datasource.password=SUA_SENHA
-spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-
-# JPA / Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
-```
-
-> ⚠️ **Atenção:** Nunca commite credenciais reais no repositório. Use variáveis de ambiente (ver seção [Variáveis de Ambiente](#-variáveis-de-ambiente)).
-
-### 3. Instale as dependências
+## Entrar na pasta do projeto
 
 ```bash
-./mvnw clean install -DskipTests
+cd ClyvoPredict-Devops
 ```
 
 ---
 
-## ▶️ Executando a Aplicação
-
-### Modo desenvolvimento (com hot reload)
+## Executar com Docker Compose
 
 ```bash
-./mvnw spring-boot:run
+docker compose up -d
 ```
 
-### Gerando o JAR e executando
+---
+
+# Acesso da Aplicação
+
+## API
+
+```text
+http://IP-DA-VM:8080
+```
+
+---
+
+## Swagger
+
+```text
+http://IP-DA-VM:8080/swagger-ui/index.html
+```
+
+---
+
+## H2 Console
+
+```text
+http://IP-DA-VM:8080/h2-console
+```
+
+---
+
+# Configuração do Banco H2
+
+## JDBC URL
+
+```text
+jdbc:h2:file:/data/clyvodb
+```
+
+## Usuário
+
+```text
+sa
+```
+
+## Senha
+
+```text
+(vazio)
+```
+
+---
+
+# Persistência de Dados
+
+A aplicação utiliza volume nomeado Docker para persistência do banco H2.
+
+Volume utilizado:
+
+```text
+h2data
+```
+
+Mesmo após reiniciar os containers, os dados permanecem salvos.
+
+---
+
+# Docker
+
+## Dockerfile
+
+O projeto possui Dockerfile próprio para build da aplicação Java.
+
+## Docker Compose
+
+O projeto utiliza Docker Compose para orquestração da aplicação e persistência do banco.
+
+---
+
+# Script Azure CLI
+
+O arquivo `azure-script.sh` automatiza:
+
+- Criação da VM Linux na Azure
+- Abertura das portas necessárias
+- Instalação do Docker
+- Instalação do Git
+- Instalação do Nano
+- Configuração do ambiente da aplicação
+
+---
+
+# Execução em Background
+
+A aplicação é executada em background utilizando Docker Compose:
 
 ```bash
-# Build
-./mvnw clean package -DskipTests
-
-# Execução
-java -jar target/clyvo-predict-0.0.1-SNAPSHOT.jar
-```
-
-### Com variáveis de ambiente inline
-
-```bash
-DB_URL=jdbc:oracle:thin:@localhost:1521:XE \
-DB_USER=clyvo \
-DB_PASS=senha123 \
-./mvnw spring-boot:run
-```
-
-A aplicação estará disponível em:
-
-```
-http://localhost:8080
+docker compose up -d
 ```
 
 ---
 
-## 📖 Documentação da API
+# Usuário Não Root
 
-O projeto utiliza **Springdoc OpenAPI 2.8** para geração automática da documentação interativa.
+A aplicação é executada utilizando usuário sem privilégios administrativos dentro do container:
 
-Após subir a aplicação, acesse:
-
-| Interface | URL |
-|---|---|
-| **Swagger UI** | [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) |
-| **OpenAPI JSON** | [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs) |
-| **OpenAPI YAML** | [http://localhost:8080/v3/api-docs.yaml](http://localhost:8080/v3/api-docs.yaml) |
-
-> O Swagger UI permite testar todos os endpoints diretamente pelo navegador, sem necessidade de ferramentas externas como Postman.
-
----
-
-## 🔐 Variáveis de Ambiente
-
-Para evitar expor credenciais no código-fonte, configure as seguintes variáveis de ambiente:
-
-| Variável | Descrição | Exemplo |
-|---|---|---|
-| `DB_URL` | URL de conexão JDBC com o Oracle | `jdbc:oracle:thin:@localhost:1521:XE` |
-| `DB_USER` | Usuário do banco de dados | `clyvo_user` |
-| `DB_PASS` | Senha do banco de dados | `senha_secreta` |
-| `SERVER_PORT` | Porta da aplicação (padrão: 8080) | `8080` |
-
-No `application.properties`, referencie as variáveis assim:
-
-```properties
-spring.datasource.url=${DB_URL}
-spring.datasource.username=${DB_USER}
-spring.datasource.password=${DB_PASS}
-server.port=${SERVER_PORT:8080}
+```text
+appuser
 ```
 
 ---
 
-## 🧪 Testes
+# Evidências da Entrega
 
-### Executar todos os testes
+A entrega contempla:
 
-```bash
-./mvnw test
-```
-
-### Executar com relatório de cobertura
-
-```bash
-./mvnw verify
-```
-
-Os relatórios de teste ficam disponíveis em `target/surefire-reports/`.
-
----
-
-## 👥 Time
-
-Desenvolvido por estudantes da **FIAP** como parte do **Challenge 2026** em parceria com a startup **Clyvo**.
-
-| Nome | GitHub |
-|---|---|
-| Maria Gabriela Landim Severo | [@gabrielalandim](https://github.com/gabrielalandim) |
-
-> 📌 Projeto acadêmico desenvolvido no contexto do **Challenge FIAP 2026 — Clyvo**.
+- CRUD completo
+- Persistência de dados
+- Banco H2 conteinerizado
+- Volume nomeado
+- Execução em nuvem Azure
+- Docker
+- Docker Compose
+- Swagger
+- Azure CLI
+- Persistência após reinicialização
+- Execução em background
 
 ---
 
-## 📄 Licença
+# Integrantes
 
-Este projeto foi desenvolvido para fins acadêmicos no contexto do **Challenge FIAP 2026**. Todos os direitos reservados aos seus autores.
 
----
-
-<div align="center">
-
-Feito com ☕ e ❤️ por estudantes da **FIAP** · Challenge 2026 × **Clyvo**
-
-</div>
+Eduarda Weiss Ventura
+RM: 564434
+Maria Gabriela Landim Severo
+RM: 565146
+Samara Porto Souza
+RM: 559072
+Lucas Nunes Soares
+RM: 566503
+Camily Vitoria Pereira Maciel
+RM: 566520
